@@ -20,58 +20,58 @@ class NetStatReader(ProcReader):
         title_dict = OrderedDict()
         total_item = 0
 
-        try:
-            if util_utils.is_exist(PROC_NET_DEV):
-                with open(PROC_NET_DEV) as f:
-                    for line in f:
-                        if line.strip().startswith('Inter'):
-                            tmp = line.strip().split('|')
-                            for i in range(1, len(tmp)):
-                                title_dict[tmp[i].strip()] = []
-                        elif line.strip().startswith('face'):
-                            tmp = line.strip().split('|')
-                            for i in range(1, len(tmp)):
-                                title_dict[title_dict.items()[i-1][0]
-                                           ] = tmp[i].strip().split()
-                                total_item += len(title_dict.items()[i-1][i])
+        # try:
+        if util_utils.is_exist(PROC_NET_DEV):
+            with open(PROC_NET_DEV) as f:
+                for line in f:
+                    if line.strip().startswith('Inter'):
+                        tmp = line.strip().split('|')
+                        for i in range(1, len(tmp)):
+                            title_dict[tmp[i].strip()] = []
+                    elif line.strip().startswith('face'):
+                        tmp = line.strip().split('|')
+                        for i in range(1, len(tmp)):
+                            title_dict[title_dict.items()[i-1][0]
+                                       ] = tmp[i].strip().split()
+                            total_item += len(title_dict.items()[i-1][i])
+                    else:
+                        tmp_data = OrderedDict()
+                        tmp = line.strip().split(':')
+
+                        value = tmp[1].strip().split()
+                        if len(value) == total_item:
+                            cnt = 0
+                            for t_item in title_dict.items():
+                                tmp_data[t_item[0]] = {}
+                                for i_t in t_item[1]:
+                                    tmp_data[t_item[0]][i_t] = value[cnt]
+                                    cnt += 1
                         else:
-                            tmp_data = OrderedDict()
-                            tmp = line.strip().split(':')
+                            print('NetStatReader num of items Error Occured!')
+                        net_stat[tmp[0]] = tmp_data
 
-                            value = tmp[1].strip().split()
-                            if len(value) == total_item:
-                                cnt = 0
-                                for t_item in title_dict.items():
-                                    tmp_data[t_item[0]] = {}
-                                    for i_t in t_item[1]:
-                                        tmp_data[t_item[0]][i_t] = value[cnt]
-                                        cnt += 1
-                            else:
-                                print('NetStatReader num of items Error Occured!')
-                            net_stat[tmp[0]] = tmp_data
+        total_data = {
+            'net_bytes_in': 0,
+            'net_bytes_out': 0,
+            'net_pkts_in': 0,
+            'net_pkts_out': 0,
+        }
 
-            total_data = {
-                'net_bytes_in': 0,
-                'net_bytes_out': 0,
-                'net_pkts_in': 0,
-                'net_pkts_out': 0,
-            }
-
-            for key, value in net_stat.items():
-                if key.startwith('eth'):
-                    total_data['net_bytes_in'] += int(
-                        value['Receive']['bytes'])
-                    total_data['net_bytes_out'] += int(
-                        value['Transmit']['bytes'])
-                    total_data['net_pkts_in'] += int(
-                        value['Receive']['packets'])
-                    total_data['net_pkts_out'] += int(
-                        value['Transmit']['packets'])
-        except Exception as e:
-            print('NetStatReader Unexpected Error Occured: ' +
-                  str(sys.exc_info()[1]))
-        finally:
-            return net_stat, total_data
+        for key, value in net_stat.items():
+            if key.startwith('eth'):
+                total_data['net_bytes_in'] += int(
+                    value['Receive']['bytes'])
+                total_data['net_bytes_out'] += int(
+                    value['Transmit']['bytes'])
+                total_data['net_pkts_in'] += int(
+                    value['Receive']['packets'])
+                total_data['net_pkts_out'] += int(
+                    value['Transmit']['packets'])
+        # except Exception as e:
+        #     print('NetStatReader Unexpected Error Occured: ' +
+        #           str(sys.exc_info()[1]))
+        # finally:
+        return net_stat, total_data
 
     def get_data(self):
         net_state_1, total_data_1 = self._get_net_data()

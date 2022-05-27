@@ -7,7 +7,7 @@ from collections import OrderedDict
 import ProcReader.util as util_utils
 
 from ProcReader.ProcReaderClass import ProcReader
-from ProcReader.settings import (PROC_CPU_INFOm, PROC_UPTIME_INFO)
+from ProcReader.settings import (PROC_CPU_INFO, PROC_UPTIME_INFO)
 
 
 class UptimeReader(ProcReader):
