@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 import sys
 import time
+import traceback
 from collections import OrderedDict
 
 import ProcReader.util as util_utils
@@ -35,7 +36,7 @@ class CPUInfoReader(ProcReader):
                                 proc_info[line.split(':')[0].strip()] = ''
         except Exception as e:
             print('CPUInfoReader Unexpected Error Occured: ' +
-                  str(sys.exc_info()[1]))
+                  str(traceback.print_exc()))
         finally:
             return cpu_info
 
@@ -47,21 +48,21 @@ class CPUUsageReader(ProcReader):
     def _read_proc_stat(self):
         cpu_line = OrderedDict()
         f = None
-        # try:
-        if util_utils.is_exist(PROC_CPU_STAT):
-            f = open(PROC_CPU_STAT)
-            lines = f.readlines(PROC_CPU_STAT)
-            for line in lines:
-                if line.startswith('cpu'):
-                    tmp = line.strip().split()
-                    cpu_line[tmp[0]] = tmp[1:len(tmp)]
-        # except Exception as e:
-        #     print('CPUUsageReader Unexpected Error Occured: ' +
-        #           str(sys.exc_info()[1]))
-        # finally:
-        if f:
-            f.close()
-        return cpu_line
+        try:
+            if util_utils.is_exist(PROC_CPU_STAT):
+                f = open(PROC_CPU_STAT)
+                lines = f.readlines()
+                for line in lines:
+                    if line.startswith('cpu'):
+                        tmp = line.strip().split()
+                        cpu_line[tmp[0]] = tmp[1:len(tmp)]
+        except Exception as e:
+            print('CPUUsageReader Trace back error: ' +
+                  str(traceback.print_exc()))
+        finally:
+            if f:
+                f.close()
+            return cpu_line
 
     def get_data(self):
         cpu_usage = {}
@@ -92,8 +93,9 @@ class CPUUsageReader(ProcReader):
 
         if total_1 and total_2:
             for item in total_1:
+                # ((t2 - t1) - (i2 - i1)) / (t2 - t1) * 100
                 cpu_usage[item] = {
-                    'volume': round(100 * (1 - float(idle_2[item] - idle_1[item])) / float(total_2[item] - total_1[item])),
+                    'volume': round(100 * (float(total_2[item] - total_1[item]) - float(idle_2[item] - idle_1[item])) / float(total_2[item] - total_1[item])),
                     'unit': '%',
                 }
 
@@ -102,8 +104,8 @@ class CPUUsageReader(ProcReader):
 
 # test
 if __name__ == '__main__':
-    # cpu_info = CPUInfoReader()
-    # util_utils.print_list(cpu_info.get_data())
+    cpu_info = CPUInfoReader()
+    util_utils.print_list(cpu_info.get_data())
 
     cpu_usage = CPUUsageReader()
     util_utils.print_list(cpu_usage.get_data())

@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 import sys
 import time
+import traceback
 
 from collections import OrderedDict
 
@@ -69,7 +70,7 @@ class NetStatReader(ProcReader):
                     value['Transmit']['packets'])
         # except Exception as e:
         #     print('NetStatReader Unexpected Error Occured: ' +
-        #           str(sys.exc_info()[1]))
+        #           str(traceback.print_exc()))
         # finally:
         return net_stat, total_data
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import os
+import traceback
 
 import ProcReader.util as util_utils
 
@@ -32,7 +33,7 @@ class LoadStatReader(ProcReader):
                     load_stat['last_pid'] = load_info[4]
         except Exception as e:
             print('LoadStatReader Unexpected Error Occured: ' +
-                  str(sys.exc_info()[1]))
+                  str(traceback.print_exc()))
         finally:
             if f:
                 f.close()

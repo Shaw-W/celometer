@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
+import traceback
+
 from collections import OrderedDict
 
 import ProcReader.util as util_utils
@@ -62,7 +64,7 @@ class MemInfoReader(ProcReader):
                             mem_info[tmp[0].strip()] = tmp_value
         except Exception as e:
             print('MemInfoReader Unexpected Error Occured: ' +
-                  str(sys.exc_info()[1]))
+                  str(traceback.print_exc()))
         finally:
             return mem_info
 

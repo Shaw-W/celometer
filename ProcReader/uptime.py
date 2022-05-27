@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import time
+import traceback
 
 from collections import OrderedDict
 
@@ -53,7 +54,7 @@ class UptimeReader(ProcReader):
             }
         except Exception as e:
             print('UptimeReader Unexpected Error Occured: ' +
-                  str(sys.exc_info()[1]))
+                  str(traceback.print_exc()))
         finally:
             return uptime_info
 
