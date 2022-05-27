@@ -166,7 +166,7 @@ class DiskUsageReader(ProcReader):
 
     def get_data(self):
         disk_list = self._get_disk_partitions()
-        disk_io = self._get_disk_IO(dev_list)
+        disk_io = self._get_disk_IO(disk_list)
 
         total_available = 0
         total_capacity = 0

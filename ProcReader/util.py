@@ -13,7 +13,7 @@ def is_exist(filename):
 
 def print_list(obj_list):
     json_str = json.dumps(obj_list, indent=1)
-    print(json)
+    print(json_str)
 
 
 def append_file(content, filename):
