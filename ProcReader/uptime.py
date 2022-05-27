@@ -60,6 +60,6 @@ class UptimeReader(ProcReader):
 
 
 # test.py
-if __name__ == "__name__":
+if __name__ == "__main__":
     uptime_info = UptimeReader()
     util_utils.print_list(uptime_info.get_data())
