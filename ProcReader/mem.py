@@ -19,7 +19,7 @@ class MemInfoReader(ProcReader):
         if force_unit:
             if force_unit in MEM_UNIT_LIST:
                 tmp_value = float(value) / \
-                    rate_list[MEM_UNIT_LIST.index(force_unit)]
+                    MEM_RATE_LIST[MEM_UNIT_LIST.index(force_unit)]
                 result = {
                     'volume': round(tmp_value, 2),
                     'unit': force_unit,
@@ -55,10 +55,10 @@ class MemInfoReader(ProcReader):
                             volume_unit = tmp[1].strip().split(' ')
                             if len(volume_unit) == 2:
                                 tmp_value = self._change_unit(
-                                    value=long(volume_unit[0]), force_unit='MB')
+                                    value=(volume_unit[0]), force_unit='MB')
                             elif len(volume_unit) == 1:
                                 tmp_value = {
-                                    'volume': long(long(volume_unit[0])),
+                                    'volume': (volume_unit[0]),
                                     'unit': '',
                                 }
                             mem_info[tmp[0].strip()] = tmp_value
