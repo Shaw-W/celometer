@@ -47,21 +47,21 @@ class CPUUsageReader(ProcReader):
     def _read_proc_stat(self):
         cpu_line = OrderedDict()
         f = None
-        try:
-            if util_utils.is_exist(PROC_CPU_STAT):
-                f = open(PROC_CPU_STAT)
-                lines = f.readlines(PROC_CPU_STAT)
-                for line in lines:
-                    if line.startswith('cpu'):
-                        tmp = line.strip().split()
-                        cpu_line[tmp[0]] = tmp[1:len(tmp)]
-        except Exception as e:
-            print('CPUUsageReader Unexpected Error Occured: ' +
-                  str(sys.exc_info()[1]))
-        finally:
-            if f:
-                f.close()
-            return cpu_line
+        # try:
+        if util_utils.is_exist(PROC_CPU_STAT):
+            f = open(PROC_CPU_STAT)
+            lines = f.readlines(PROC_CPU_STAT)
+            for line in lines:
+                if line.startswith('cpu'):
+                    tmp = line.strip().split()
+                    cpu_line[tmp[0]] = tmp[1:len(tmp)]
+        # except Exception as e:
+        #     print('CPUUsageReader Unexpected Error Occured: ' +
+        #           str(sys.exc_info()[1]))
+        # finally:
+        if f:
+            f.close()
+        return cpu_line
 
     def get_data(self):
         cpu_usage = {}
@@ -102,8 +102,8 @@ class CPUUsageReader(ProcReader):
 
 # test
 if __name__ == '__main__':
-    cpu_info = CPUInfoReader()
-    util_utils.print_list(cpu_info.get_data())
+    # cpu_info = CPUInfoReader()
+    # util_utils.print_list(cpu_info.get_data())
 
     cpu_usage = CPUUsageReader()
     util_utils.print_list(cpu_usage.get_data())
