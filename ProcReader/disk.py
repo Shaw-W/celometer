@@ -109,15 +109,17 @@ class DiskUsageReader(ProcReader):
                                           0.5, 'unit': 'KB/s'}
                 disk_io[disk]['wkB/s'] = {'volume': wsec_s *
                                           0.5, 'unit': 'KB/s'}
-                disk_io[disk]['avgrq-sz'] = round((disk_io[disk]['rsec/s'] + disk_io[disk]['wsec/s'])/(
-                    disk_io[disk]['r/s']['volume'] + disk_io[disk]['w/s']['volume']), 2)
+                disk_io[disk]['avgrq-sz'] = 0.0 if not (
+                    disk_io[disk]['r/s']['volume'] + disk_io[disk]['w/s']['volume']) else round((disk_io[disk]['rsec/s'] + disk_io[disk]['wsec/s']) / (
+                        disk_io[disk]['r/s']['volume'] + disk_io[disk]['w/s']['volume']), 2)
                 disk_io[disk]['avgqu-sz'] = round(
                     disk_stats_2[disk]['f11'] - disk_stats_1[disk]['f11'], 2)
-                disk_io[disk]['await'] = round(((disk_stats_2[disk]['f4'] - disk_stats_1[disk]['f4'])+(
-                    disk_stats_2[disk]['f8'] - disk_stats_1[disk]['f8']))/(disk_io[disk]['r/s']['volume'] + disk_io[disk]['w/s']['volume']), 2)
-                disk_io[disk]['r_await'] = round(
-                    (disk_stats_2[disk]['f4'] - disk_stats_1[disk]['f4']) / disk_io[disk]['r/s']['volume'], 2)
-                disk_io[disk]['w_await'] = round(
+                disk_io[disk]['await'] = 0.0 if not (
+                    disk_io[disk]['r/s']['volume'] + disk_io[disk]['w/s']['volume']) else round(((disk_stats_2[disk]['f4'] - disk_stats_1[disk]['f4'])+(
+                        disk_stats_2[disk]['f8'] - disk_stats_1[disk]['f8']))/(disk_io[disk]['r/s']['volume'] + disk_io[disk]['w/s']['volume']), 2)
+                disk_io[disk]['r_await'] = 0.0 if not disk_io[disk]['r/s']['volume'] else round(
+                    (disk_stats_2[disk]['f4'] - disk_stats_1[disk]['f4'])/disk_io[disk]['r/s']['volume'], 2)
+                disk_io[disk]['w_await'] = 0.0 if not disk_io[disk]['w/s']['volume'] else round(
                     (disk_stats_2[disk]['f8'] - disk_stats_1[disk]['f8'])/disk_io[disk]['w/s']['volume'], 2)
         return disk_io
 
