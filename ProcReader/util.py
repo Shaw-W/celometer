@@ -5,6 +5,7 @@ import json
 import importlib
 import urllib.request as urllibReq
 import urllib.error as urllibError
+import urllib.parse as urlparse
 
 
 def is_exist(filename):
@@ -79,7 +80,7 @@ def rd_data(url):
 
 
 def wr_data(url, obj):
-    data = json.dumps(obj)
+    data = urlparse.urlencode({'data': obj}).encode('ascii')
     res = None
     try:
         req = urllibReq.Request(

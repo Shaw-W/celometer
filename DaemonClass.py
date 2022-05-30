@@ -85,7 +85,9 @@ class Daemon(object):
 
     def stop(self):
         try:
-            pass
+            pf = file(self.pidfile, 'r')
+            pid = int(pf.read().strip())
+            pf.close()
         except IOError:
             pid = None
 
