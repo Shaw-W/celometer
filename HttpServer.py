@@ -111,7 +111,7 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 if __name__ == '__main__':
     server = None
     try:
-        server = ThreadedHTTPServer(('0.0.0.0', '8655'), Handler)
+        server = ThreadedHTTPServer(('0.0.0.0', '4396'), Handler)
         if sys.argv[1]:
             Handler.reader_path = sys.argv[1]
         print('Starting server, use <Ctrl-C> to stop')

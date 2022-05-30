@@ -7,7 +7,7 @@ PID_reader=`ps -ef | grep ReaderManager.py | grep -v grep | awk '{print $2}'`
 
 if [ -n "$PID_reader" ]
 then
-    python ${workspace}/ReaderManager.py stop
+    python3 ${workspace}/ReaderManager.py stop
 fi
 
 sleep 1

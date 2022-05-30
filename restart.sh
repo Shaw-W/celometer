@@ -6,24 +6,24 @@ workspace=$(cd `dirname $0`; pwd)
 PID_reader=`ps -ef | grep ReaderManager.py | grep -v grep | awk '{print $2}'`
 if [ -n "$PID_reader" ]
 then
-    python ${workspace}/ReaderManager.py stop
+    python3 ${workspace}/ReaderManager.py stop
     echo "Stop Reading task done"
 fi
 
 ps -ef | grep HttpServer.py | grep -v grep | awk '{print $ 2}' | xargs kill
 
-if [ -f "/tmp/httpsvr.log" ]; then
-    rm /tmp/httpsvr.log
+if [ -f "${workspace}/httpsvr.log" ]; then
+    rm ${workspace}/httpsvr.log
 fi
 
 echo "Stop HttpServer done"
 
-nohup python ${workspace}/HttpServer.py ${workspace} > /tmp/httpsvr.log 2>&1 &
+nohup python3 ${workspace}/HttpServer.py ${workspace} > ${workspace}/httpsvr.log 2>&1 &
 echo "Start HttpServer done"
 
 sleep .5
 
-python ${workspace}/ReaderManager.py start
-python ${workspace}/ReaderManager.py setintvl 10
-python ${workspace}/ReaderManager.py setreader "['ProcReader.cpu.CPUUsageReader', 'ProcReader.mem.MemInfoReader', 'ProcReader.load.LoadStatReader', 'ProcReader.disk.DiskUsageReader', 'ProcReader.net.NetStatReader', 'ProcReader.uptime.UptimeReader']"
+python3 ${workspace}/ReaderManager.py start
+python3 ${workspace}/ReaderManager.py setintvl 10
+python3 ${workspace}/ReaderManager.py setreader "['ProcReader.cpu.CPUUsageReader', 'ProcReader.mem.MemInfoReader', 'ProcReader.load.LoadStatReader', 'ProcReader.disk.DiskUsageReader', 'ProcReader.net.NetStatReader', 'ProcReader.uptime.UptimeReader']"
 echo "Start Reading task done"

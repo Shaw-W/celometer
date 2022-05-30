@@ -55,7 +55,7 @@ class ReaderManager(Daemon):
     def set_intvl(self, intvl):
         if intvl > 1:
             self._intvl = intvl
-            util.wr_data('%s%s' % (self._wr_url, 'setintvl'), intvl)
+            util_utils.wr_data('%s%s' % (self._wr_url, 'setintvl'), intvl)
             self.restart()
 
     def set_readersters(self, readersters):
